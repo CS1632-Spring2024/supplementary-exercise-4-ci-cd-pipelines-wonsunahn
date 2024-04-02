@@ -1,6 +1,6 @@
 package edu.pitt.cs;
 
-public class CatImpl implements Cat {
+public class CatSolution implements Cat {
 
 	/**
 	 * Indicates whether or not the cat is rented.
@@ -25,7 +25,7 @@ public class CatImpl implements Cat {
 	 * @param int    id - the id number of this cat
 	 * @param String name - the name of this Cat
 	 */
-	public CatImpl(int id, String name) {
+	public CatSolution(int id, String name) {
 		this.rented = false;
 		this.id = id;
 		this.name = name;

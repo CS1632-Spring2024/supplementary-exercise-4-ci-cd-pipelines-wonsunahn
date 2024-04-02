@@ -3,7 +3,7 @@ package edu.pitt.cs;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RentACatImpl implements RentACat {
+public class RentACatManual implements RentACat {
 
 	private ArrayList<Cat> cats = new ArrayList<Cat>();
 
@@ -28,6 +28,8 @@ public class RentACatImpl implements RentACat {
 			} else {
 				System.out.println(c.getName() + " is already here!");
 			}
+		} else {
+			System.out.println("Invalid cat ID.");
 		}
 		return false;
 	}
@@ -53,6 +55,10 @@ public class RentACatImpl implements RentACat {
 			} else {
 				System.out.println("Sorry, " + c.getName() + " is not here!");
 			}
+		} else if (id == 4) {
+			System.out.println(" has been rented.");
+		} else {
+			System.out.println("Invalid cat ID.");
 		}
 		return false;
 	}
@@ -68,7 +74,8 @@ public class RentACatImpl implements RentACat {
 
 	public boolean renameCat(int id, String name) {
 		Cat c = getCat(id);
-		if (c != null) {
+		// BUG: cat ID 3 is treated as an invalid cat.
+		if (c != null && id < 3) {
 			if (!c.getRented()) {
 				c.renameCat(name);
 				System.out.println("Hello, " + c.getName() + "!");
@@ -76,6 +83,8 @@ public class RentACatImpl implements RentACat {
 			} else {
 				System.out.println("Sorry, " + c.getName() + " is not here!");
 			}
+		} else {
+			System.out.println("Invalid cat ID.");
 		}
 		return false;
 	}
@@ -112,6 +121,50 @@ public class RentACatImpl implements RentACat {
 	}
 
 	/**
+	 * Given an id, return true if the cat exists in the list of cats or false if
+	 * no cat with that id number exists in the list. If list is null or contains 0
+	 * elements, should always return false.
+	 * 
+	 * @param id ID of cat to search for
+	 * @return true if cat exists in list, false otherwise
+	 */
+
+	public boolean catExists(int id) {
+		// TODO
+		return getCat(id) != null;
+	}
+
+	/**
+	 * Given an id, return true if the cat exists in the list of cats and is
+	 * available for rent; otherwise return false. If list is null or contains 0
+	 * elements, should always return false.
+	 * 
+	 * @param id ID of cat to search for
+	 * @return true if cat available for rent, false otherwise
+	 */
+
+	public boolean catAvailable(int id) {
+
+		// null / zero-element check
+		if (cats == null || cats.size() == 0) {
+			return false;
+		}
+		Cat c = getCat(id);
+		if (c == null) {
+			// No cat of this ID exists, thus it is not available
+			return false;
+		} else if (c.getRented()) {
+			// This cat exists, but has already been rented
+			return false;
+		}
+
+		// If cat exists and is not rented, then the cat
+		// is available to rent
+		return true;
+
+	}
+
+	/**
 	 * Given an id, return a reference to the specified cat if a cat with that ID
 	 * exists. Return null if no cat of that ID exists in the list.
 	 * 
@@ -119,10 +172,10 @@ public class RentACatImpl implements RentACat {
 	 * @return Cat searched for if exists, null otherwise
 	 */
 
-	private Cat getCat(int id) {
+	public Cat getCat(int id) {
 
-		// null check
-		if (cats == null) {
+		// null / zero-element check
+		if (cats == null || cats.size() == 0) {
 			return null;
 		}
 
@@ -138,7 +191,6 @@ public class RentACatImpl implements RentACat {
 		// If we get all the way through the list and did
 		// not find a cat whose ID matches the passed-in
 		// ID, then the cat is not in the list
-		System.out.println("Invalid cat ID.");
 		return null;
 
 	}
@@ -159,7 +211,7 @@ public class RentACatImpl implements RentACat {
 	 * @param args - IGNORED, kept for compatibility
 	 */
 	public static void main(String[] args) {
-		RentACat rc = new RentACatImpl();
+		RentACat rc = new RentACatManual();
 
 		rc.addCat(new CatImpl(1, "Jennyanydots"));
 		rc.addCat(new CatImpl(2, "Old Deuteronomy"));
@@ -172,64 +224,49 @@ public class RentACatImpl implements RentACat {
 
 		while (keepGoing) {
 			System.out.print("Option [1,2,3,4,5] > ");
-			try {
-				option = sc.nextInt();
-				switch (option) {
-					case 1:
-						System.out.println("Cats for Rent");
-						System.out.print(rc.listCats());
+
+			option = sc.nextInt();
+			switch (option) {
+				case 1:
+					System.out.println("Cats for Rent");
+					System.out.print(rc.listCats());
+					break;
+				case 2:
+					System.out.print("Rent which cat? > ");
+					try {
+						int catIdToRent = sc.nextInt();
+						rc.rentCat(catIdToRent);
+					} catch (Exception ex) {
+						System.out.println("Invalid cat ID.");
+						sc.next();
 						break;
-					case 2:
-						System.out.print("Rent which cat? > ");
-						try {
-							int catIdToRent = sc.nextInt();
-							rc.rentCat(catIdToRent);
-						} catch (Exception ex) {
-							System.out.println("Invalid cat ID.");
-							sc.next();
-							break;
-						}
+					}
+					break;
+				case 3:
+					// BUG: failed to handle invalid cat exception.
+					System.out.print("Return which cat? > ");
+					int catIdToReturn = sc.nextInt();
+					rc.returnCat(catIdToReturn);
+					break;
+				case 4:
+					System.out.print("Rename which cat? > ");
+					try {
+						int catIdToRename = sc.nextInt();
+						sc.nextLine(); // to flush the previous line
+						System.out.print("What is the new name? > ");
+						String newName = sc.nextLine();
+						rc.renameCat(catIdToRename, newName);
+					} catch (Exception ex) {
+						System.out.println("Invalid cat ID.");
+						sc.next();
 						break;
-					case 3:
-						System.out.print("Return which cat? > ");
-						try {
-							int catIdToReturn = sc.nextInt();
-							rc.returnCat(catIdToReturn);
-						} catch (Exception ex) {
-							System.out.println("Invalid cat ID.");
-							sc.next();
-							break;
-						}
-						break;
-					case 4:
-						System.out.print("Rename which cat? > ");
-						try {
-							int catIdToRename = sc.nextInt();
-							sc.nextLine(); // to flush the previous line
-							System.out.print("What is the new name? > ");
-							String newName = sc.nextLine();
-							rc.renameCat(catIdToRename, newName);
-						} catch (Exception ex) {
-							System.out.println("Invalid cat ID.");
-							sc.next();
-							break;
-						}
-						break;
-					case 5:
-						keepGoing = false;
-						break;
-					default:
-						throw new NumberFormatException();
-				}
-			} catch (Exception nfex) {
-				System.err.println("Please enter 1, 2, 3, 4 or 5");
-				System.err.println("1. See list of cats for rent");
-				System.err.println("2. Rent a cat to a customer");
-				System.err.println("3. Return a cat from a customer");
-				System.err.println("4. Rename a cat");
-				System.err.println("5. Quit");
-				// Clear out the non-int in the scanner
-				sc.next();
+					}
+					break;
+				case 5:
+					keepGoing = false;
+					break;
+				default:
+					break;
 			}
 		}
 

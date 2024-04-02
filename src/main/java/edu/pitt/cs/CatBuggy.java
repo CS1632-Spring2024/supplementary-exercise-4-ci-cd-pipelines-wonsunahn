@@ -1,11 +1,11 @@
 package edu.pitt.cs;
 
-public class CatImpl implements Cat {
+public class CatBuggy implements Cat {
 
 	/**
 	 * Indicates whether or not the cat is rented.
 	 */
-	private boolean rented = false;
+	private boolean rented = true;
 
 	/**
 	 * ID of the cat By default, -1
@@ -15,34 +15,24 @@ public class CatImpl implements Cat {
 	/**
 	 * Name of the cat
 	 */
-	private String name;
+	private String name = "Snoopy";
 
-	/**
-	 * Constructor - creates a new Cat object Note there are no checks that this ID
-	 * is not taken by another cat! This is probably something that we would fix in
-	 * a production system.
-	 * 
-	 * @param int    id - the id number of this cat
-	 * @param String name - the name of this Cat
-	 */
-	public CatImpl(int id, String name) {
-		this.rented = false;
-		this.id = id;
-		this.name = name;
+	public CatBuggy(int id, String name) {
+		
 	}
 
 	/**
 	 * Rent cat. Simply sets the _rented flag to true.
 	 */
 	public void rentCat() {
-		rented = true;
+		rented = false;
 	}
 
 	/**
 	 * Return cat. Simply sets the _rented flag to false.
 	 */
 	public void returnCat() {
-		rented = false;
+		rented = true;
 	}
 
 	/**
@@ -51,7 +41,6 @@ public class CatImpl implements Cat {
 	 * @param String name New name of the cat
 	 */
 	public void renameCat(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -59,6 +48,7 @@ public class CatImpl implements Cat {
 	 * 
 	 * @return String name of cat
 	 */
+
 	public String getName() {
 		return name;
 	}
@@ -68,6 +58,7 @@ public class CatImpl implements Cat {
 	 * 
 	 * @return int ID of this cat
 	 */
+
 	public int getId() {
 		return id;
 	}
@@ -77,6 +68,7 @@ public class CatImpl implements Cat {
 	 * 
 	 * @return boolean - true if rented, false otherwise
 	 */
+
 	public boolean getRented() {
 		return rented;
 	}
@@ -87,8 +79,9 @@ public class CatImpl implements Cat {
 	 * 
 	 * @return String string version of cat
 	 */
+
 	public String toString() {
-		return "ID " + id + ". " + name;
+		return "ID 1. Snoopy";
 	}
 
 }

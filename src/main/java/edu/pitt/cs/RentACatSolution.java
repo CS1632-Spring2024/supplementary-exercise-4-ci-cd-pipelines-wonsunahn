@@ -3,7 +3,7 @@ package edu.pitt.cs;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RentACatImpl implements RentACat {
+public class RentACatSolution implements RentACat {
 
 	private ArrayList<Cat> cats = new ArrayList<Cat>();
 
@@ -17,7 +17,7 @@ public class RentACatImpl implements RentACat {
 	 * @return true if cat exists and was rented out, false otherwise
 	 */
 
-	public boolean returnCat(int id) {
+	 public boolean returnCat(int id) {
 		// TODO
 		Cat c = getCat(id);
 		if (c != null) {
@@ -159,11 +159,11 @@ public class RentACatImpl implements RentACat {
 	 * @param args - IGNORED, kept for compatibility
 	 */
 	public static void main(String[] args) {
-		RentACat rc = new RentACatImpl();
+		RentACat rc = new RentACatSolution();
 
-		rc.addCat(new CatImpl(1, "Jennyanydots"));
-		rc.addCat(new CatImpl(2, "Old Deuteronomy"));
-		rc.addCat(new CatImpl(3, "Mistoffelees"));
+		rc.addCat(new CatSolution(1, "Jennyanydots"));
+		rc.addCat(new CatSolution(2, "Old Deuteronomy"));
+		rc.addCat(new CatSolution(3, "Mistoffelees"));
 
 		Scanner sc = new Scanner(System.in);
 

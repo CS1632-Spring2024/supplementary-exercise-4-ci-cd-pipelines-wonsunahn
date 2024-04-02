@@ -3,7 +3,7 @@ package edu.pitt.cs;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RentACatImpl implements RentACat {
+public class RentACatBuggy implements RentACat {
 
 	private ArrayList<Cat> cats = new ArrayList<Cat>();
 
@@ -20,16 +20,11 @@ public class RentACatImpl implements RentACat {
 	public boolean returnCat(int id) {
 		// TODO
 		Cat c = getCat(id);
-		if (c != null) {
-			if (c.getRented()) {
-				c.returnCat();
-				System.out.println("Welcome back, " + c.getName() + "!");
-				return true;
-			} else {
-				System.out.println(c.getName() + " is already here!");
-			}
+		if (c != null && !c.getRented()) {
+			c.returnCat();
+			return true;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -45,16 +40,11 @@ public class RentACatImpl implements RentACat {
 	public boolean rentCat(int id) {
 		// TODO
 		Cat c = getCat(id);
-		if (c != null) {
-			if (!c.getRented()) {
-				c.rentCat();
-				System.out.println(c.getName() + " has been rented.");
-				return true;
-			} else {
-				System.out.println("Sorry, " + c.getName() + " is not here!");
-			}
+		if (c != null && c.getRented()) {
+			c.rentCat();
+			return true;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -66,18 +56,14 @@ public class RentACatImpl implements RentACat {
 	 * @return true if cat exists, false otherwise
 	 */
 
-	public boolean renameCat(int id, String name) {
+	 public boolean renameCat(int id, String name) {
 		Cat c = getCat(id);
-		if (c != null) {
-			if (!c.getRented()) {
-				c.renameCat(name);
-				System.out.println("Hello, " + c.getName() + "!");
-				return true;
-			} else {
-				System.out.println("Sorry, " + c.getName() + " is not here!");
-			}
+		if (c == null) {
+			// No cat of this ID exists, thus it is not available
+			return true;
 		}
-		return false;
+		c.renameCat("Snoopy");
+		return true;
 	}
 
 	/**
@@ -95,14 +81,14 @@ public class RentACatImpl implements RentACat {
 		String ret = "";
 		// null / zero-element check
 		if (cats == null || cats.size() == 0) {
-			return "";
+			return "empty";
 		}
 
 		// Loop through every cat in the cat list
 		for (Cat c : cats) {
 			if (!c.getRented()) {
 				ret += c.toString();
-				ret += "\n";
+				ret += "\t";
 			}
 		}
 		// If we get all the way through the list and did
@@ -159,11 +145,11 @@ public class RentACatImpl implements RentACat {
 	 * @param args - IGNORED, kept for compatibility
 	 */
 	public static void main(String[] args) {
-		RentACat rc = new RentACatImpl();
+		RentACat rc = new RentACatBuggy();
 
-		rc.addCat(new CatImpl(1, "Jennyanydots"));
-		rc.addCat(new CatImpl(2, "Old Deuteronomy"));
-		rc.addCat(new CatImpl(3, "Mistoffelees"));
+		rc.addCat(new CatBuggy(1, "Jennyanydots"));
+		rc.addCat(new CatBuggy(2, "Old Deuteronomy"));
+		rc.addCat(new CatBuggy(3, "Mistoffelees"));
 
 		Scanner sc = new Scanner(System.in);
 
